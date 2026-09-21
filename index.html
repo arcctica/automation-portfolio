@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alex. Automations — No-Code Automation Expert</title>
+<title>Sergei. Automations — No-Code Automation Expert</title>
 <meta name="description" content="No-code automation expert building custom Make.com and Zapier workflows, CRM integrations, data sync and dashboards.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23081b22'/%3E%3Ccircle cx='50' cy='50' r='22' fill='none' stroke='%2322e6f5' stroke-width='8'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -404,6 +404,12 @@
     color: transparent;
   }
   .stat-label { color: var(--c-text-grey); font-size: 0.98rem; line-height: 1.6; }
+  .count {
+    display: inline-block;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
 
   /* ============ SERVICES ============ */
   .services { padding: 70px 0 110px; }
@@ -476,6 +482,114 @@
     border-top: 1px solid rgba(255,255,255,0.08);
   }
 
+  /* ============ CONTACT MODAL ============ */
+  .contact-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+  }
+  .contact-modal.active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease, visibility 0s linear 0s;
+  }
+  .contact-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(2,8,11,0.65);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .contact-modal-card {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    padding: 36px 30px 30px;
+    text-align: left;
+    transform: translateY(16px) scale(0.97);
+    transition: transform 0.35s var(--ease-out);
+  }
+  .contact-modal.active .contact-modal-card { transform: translateY(0) scale(1); }
+  .contact-modal-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 50%;
+    color: var(--c-text-grey);
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  .contact-modal-close svg { width: 16px; height: 16px; }
+  .contact-modal-close:hover { color: var(--c-white); border-color: var(--glass-border-hover); }
+  .contact-modal-title {
+    color: var(--c-white);
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+  .contact-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 0;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .contact-row-info { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .contact-row-label {
+    color: var(--c-cyan);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .contact-row-value {
+    color: var(--c-white);
+    font-size: 0.98rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+  .contact-row-actions { display: flex; gap: 8px; flex-shrink: 0; }
+  .contact-action {
+    padding: 9px 16px;
+    border-radius: 999px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--c-ice);
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.25s ease;
+  }
+  .contact-action:hover { border-color: var(--glass-border-hover); color: var(--c-white); }
+  .contact-action-primary {
+    background: linear-gradient(135deg, #4ff2fc, #12c2da 60%, #0891a8);
+    color: #052229;
+    border-color: transparent;
+  }
+  .contact-action-primary:hover { color: #052229; filter: brightness(1.08); }
+  .contact-action.copied { background: var(--c-cyan); color: #04141a; border-color: var(--c-cyan); }
+
+  @media (max-width: 420px) {
+    .contact-row { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .contact-row-actions { width: 100%; }
+    .contact-action { flex: 1; text-align: center; }
+  }
+
   /* ============ RESPONSIVE ============ */
   @media (max-width: 900px) {
     .stats-grid, .services-grid { grid-template-columns: 1fr; }
@@ -524,7 +638,7 @@
 
   <nav class="navbar" id="navbar">
     <div class="nav-container">
-      <a href="#" class="logo">Alex<span class="dot">.</span> Automations</a>
+      <a href="#" class="logo">Sergei<span class="dot">.</span> Automations</a>
       <ul class="nav-links">
         <li><a href="#services">Services</a></li>
         <li><a href="#experience">Experience</a></li>
@@ -622,20 +736,56 @@
           <a href="https://x.com/sergejpolo" class="social-icon" aria-label="X (Twitter)" target="_blank" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 1.5h3.68l-8.04 9.19L24 22.5h-7.4l-5.8-7.58-6.64 7.58H.47l8.6-9.83L0 1.5h7.59l5.24 6.93L18.9 1.5zm-1.3 18.8h2.04L6.5 3.6H4.3l13.3 16.7z"/></svg>
           </a>
-          <a href="mailto:sergeipolonsky24@gmail.com" class="social-icon" aria-label="Email">
+          <button type="button" class="social-icon" id="emailTrigger" aria-label="Email">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m4 6 8 7 8-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
+          </button>
         </div>
-        <div class="footer-bottom">&copy; 2026 Alex. Automations. All rights reserved.</div>
+        <div class="footer-bottom">&copy; 2026 Sergei. Automations. All rights reserved.</div>
       </div>
     </div>
   </footer>
+
+  <div class="contact-modal" id="contactModal" aria-hidden="true">
+    <div class="contact-modal-backdrop" data-close></div>
+    <div class="contact-modal-card glass-card">
+      <button type="button" class="contact-modal-close" data-close aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <h3 class="contact-modal-title">Get in touch</h3>
+      <div class="contact-row">
+        <div class="contact-row-info">
+          <span class="contact-row-label">Email</span>
+          <span class="contact-row-value">sergeipolonsky24@gmail.com</span>
+        </div>
+        <div class="contact-row-actions">
+          <button type="button" class="contact-action" data-copy="sergeipolonsky24@gmail.com">Copy</button>
+          <a class="contact-action contact-action-primary" href="mailto:sergeipolonsky24@gmail.com">Write</a>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-row-info">
+          <span class="contact-row-label">Phone</span>
+          <span class="contact-row-value">+1 (980) 457-6599</span>
+        </div>
+        <div class="contact-row-actions">
+          <button type="button" class="contact-action" data-copy="9804576599">Copy</button>
+          <a class="contact-action contact-action-primary" href="tel:+19804576599">Call</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script>
     (function () {
       var navbar = document.getElementById('navbar');
+      /* the entrance animation's held 'forwards' transform otherwise outranks
+         the later .navbar.nav-hidden rule in the cascade and silently blocks
+         the hide-on-scroll-down effect forever; drop it once it's done */
+      navbar.addEventListener('animationend', function () {
+        navbar.style.animation = 'none';
+      });
       var lastY = window.scrollY;
       window.addEventListener('scroll', function () {
         var y = window.scrollY;
@@ -669,6 +819,62 @@
         });
       });
 
+      /* contact modal: email icon opens it (mailto: alone does nothing when
+         the visitor has no mail client configured), phone number included too */
+      var emailTrigger = document.getElementById('emailTrigger');
+      var contactModal = document.getElementById('contactModal');
+      if (emailTrigger && contactModal) {
+        function openContactModal() {
+          contactModal.classList.add('active');
+          contactModal.setAttribute('aria-hidden', 'false');
+        }
+        function closeContactModal() {
+          contactModal.classList.remove('active');
+          contactModal.setAttribute('aria-hidden', 'true');
+        }
+        emailTrigger.addEventListener('click', openContactModal);
+        contactModal.querySelectorAll('[data-close]').forEach(function (el) {
+          el.addEventListener('click', closeContactModal);
+        });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') closeContactModal();
+        });
+
+        function fallbackCopy(text) {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand('copy'); } catch (err) {}
+          document.body.removeChild(ta);
+        }
+        contactModal.querySelectorAll('[data-copy]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var text = btn.getAttribute('data-copy');
+            var showCopied = function () {
+              var original = btn.textContent;
+              btn.textContent = 'Copied!';
+              btn.classList.add('copied');
+              setTimeout(function () {
+                btn.textContent = original;
+                btn.classList.remove('copied');
+              }, 1500);
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(text).then(showCopied).catch(function () {
+                fallbackCopy(text);
+                showCopied();
+              });
+            } else {
+              fallbackCopy(text);
+              showCopied();
+            }
+          });
+        });
+      }
+
       /* cursor-tilt micro-interaction on grid cards */
       var tiltCards = document.querySelectorAll('.stat-card, .service-card');
       tiltCards.forEach(function (card) {
@@ -686,6 +892,12 @@
       });
 
       var countEls = document.querySelectorAll('.count');
+      /* reserve the final number's width up front so the surrounding text
+         (and card) never reflows/jitters while the digits are counting up */
+      countEls.forEach(function (el) {
+        var finalStr = parseFloat(el.getAttribute('data-target')).toLocaleString('en-US');
+        el.style.minWidth = finalStr.length + 'ch';
+      });
       var hasGSAP = !!(window.gsap && window.ScrollTrigger);
 
       if (hasGSAP) {
